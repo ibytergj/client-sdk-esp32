@@ -306,7 +306,13 @@ peer_err_t peer_create(peer_handle_t *handle, peer_options_t *options)
         .video_dir = video_dir,
         .audio_info = options->media->audio_info,
         .video_info = options->media->video_info,
-        .enable_data_channel = true,
+        // The client creates data channels on the publisher peer. When the
+        // server selects subscriber-primary mode it creates channels on the
+        // subscriber peer as well. Avoid enabling SCTP on a media-only
+        // subscriber whose SDP has no application section: esp_peer would
+        // otherwise retransmit INIT chunks indefinitely.
+        .enable_data_channel = options->role == PEER_ROLE_PUBLISHER ||
+            options->subscriber_primary,
         .manual_ch_create = true,
         .no_auto_reconnect = false,
         .extra_cfg = &default_peer_cfg,
