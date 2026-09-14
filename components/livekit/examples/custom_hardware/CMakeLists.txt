@@ -1,4 +1,16 @@
 cmake_minimum_required(VERSION 3.5)
+if(WIN32)
+    # ESP-IDF's media dependency graph exceeds Windows' process command-line limit.
+    set(CMAKE_NINJA_FORCE_RESPONSE_FILE ON CACHE BOOL "Use response files for long ESP-IDF commands" FORCE)
+endif()
 set(COMPONENTS main)
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
 project(lk_custom_hardware)
+
+# esp_asrc 1.0.x logs a uint32_t with %d, which ESP-IDF 5.4 rejects under
+# -Werror. Keep it a warning for that component only; our own code is unchanged.
+idf_build_get_property(lk_build_components BUILD_COMPONENTS)
+if("espressif__esp_asrc" IN_LIST lk_build_components)
+    idf_component_get_property(lk_esp_asrc_lib espressif__esp_asrc COMPONENT_LIB)
+    target_compile_options(${lk_esp_asrc_lib} PRIVATE "-Wno-error=format")
+endif()
