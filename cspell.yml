@@ -11,6 +11,9 @@ dictionaries:
   - cpp
   - python
 words:
+  - asrc
+  - cjson
+  - werror
   - addopts
   - adduser
   - adec

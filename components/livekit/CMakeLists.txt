@@ -1,3 +1,9 @@
+if(IDF_VERSION_MAJOR GREATER_EQUAL 6)
+    set(LK_JSON_COMPONENT espressif__cjson)
+else()
+    set(LK_JSON_COMPONENT json)
+endif()
+
 idf_component_register(
     SRC_DIRS ./core ./protocol
     PRIV_INCLUDE_DIRS ./core ./protocol
@@ -10,7 +16,7 @@ idf_component_register(
         esp_netif
         esp_peer
         esp_websocket_client
-        json
+        ${LK_JSON_COMPONENT}
         khash
         mbedtls
         nanopb
