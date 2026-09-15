@@ -1,7 +1,7 @@
 version: "0.3.11"
 description: LiveKit Client SDK for ESP32
 tags: [Agents, RPC, Media, WebRTC]
-targets: [esp32s3, esp32p4]
+targets: [esp32s3, esp32p4, esp32s31]
 url: https://livekit.io/
 repository: https://github.com/livekit/client-sdk-esp32/
 issues: https://github.com/livekit/client-sdk-esp32/issues/

@@ -18,6 +18,7 @@ jobs:
         livekit:./components/livekit
         sandbox_token:./components/sandbox_token
         example_utils:./components/example_utils
+        s31_board:./components/s31_board
         nanopb:./components/third_party/nanopb
         khash:./components/third_party/khash
     steps:
