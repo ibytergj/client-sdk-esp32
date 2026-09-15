@@ -72,6 +72,40 @@ Navigate to this directory in your terminal. Run the following command to build 
 idf.py flash monitor
 ```
 
+For ESP32-S31-Korvo-1 or ESP32-S31-Function-CoreBoard-1, use ESP-IDF 6.1 and
+configure the preview target first:
+
+```sh
+idf.py --preview set-target esp32s31
+idf.py --preview menuconfig
+idf.py --preview build
+idf.py --preview -p PORT -b 921600 flash monitor
+```
+
+The S31 defaults select the Korvo-1 ES8389 audio codec and a 16 MB flash
+layout. To build for the Function-CoreBoard-1 instead, set:
+
+```ini
+CONFIG_LK_EXAMPLE_CODEC_BOARD_TYPE="ESP32_S31_FUNCTION_COREBOARD_1"
+```
+
+The Function-CoreBoard uses its mono ES8311 codec, onboard microphone, and J9
+speaker connector. The Korvo-1 uses its ES8389 codec and separate left/right
+speaker connectors. Do not flash a build configured for one board onto the
+other and expect audio to work; their codec types and audio GPIOs differ.
+Without AEC, Korvo capture selects the left input before mono conversion and
+uses 30 dB microphone gain while preserving the shared 48 kHz stereo bus.
+This avoids averaging the raw slots; it does not change speaker settings or
+codec reference routing.
+Both profiles expose their single WS2812 RGB LED to the agent (GPIO 60 on the
+Function-CoreBoard-1 and GPIO 37 on the Korvo-1). The included agent queries
+the firmware for its board identity before greeting, so it does not advertise
+unimplemented peripherals from the other S31 board or the older S3 board.
+
+See the [S31 setup and verification guide](../../../../docs/esp32s31.md) for
+the required ESP-IDF patch, board wiring, known limitations, and host-side
+interoperability test.
+
 Once running, the example will establish a network connection, connect to a LiveKit room, and print the following message:
 
 ```txt
@@ -79,6 +113,40 @@ I (19508) livekit_example: Room state: Connected
 ```
 
 If you are using the provided Sandbox, you should be able to converse with the agent at this point. Start by asking "What's the CPU temperature?"
+
+## Local agent using LiveKit Inference
+
+Function-CoreBoard-1 requires AEC to prevent the agent from hearing its own
+speaker replies. `CONFIG_LK_EXAMPLE_ENABLE_AEC=y` is the default for this
+example on both S31 boards. Keep it enabled when using the board speaker.
+Both boards passed sustained conversation and overlapping-speech listening
+checks with the standalone AEC source.
+
+For your own Cloud project, the Sandbox token server provides room access;
+a voice agent must also be running. The bundled Python agent supports
+LiveKit Inference using `LIVEKIT_URL`, `LIVEKIT_API_KEY`, and
+`LIVEKIT_API_SECRET` in `agent/.env`, without a separate OpenAI key.
+From the `agent` directory, run this PowerShell command for a hardware
+test (replace the room name with the firmware's configured room):
+
+```powershell
+$env:LIVEKIT_AGENT_BACKEND = 'livekit-inference'
+uv run python agent.py connect --room esp32-s31-interop --no-watch
+```
+
+This selects Deepgram Nova-3 STT, GPT-4.1 mini, and Cartesia Sonic-3 TTS
+through LiveKit Inference. Speech endpointing uses a 500 ms STT endpoint and
+a 1.2-second minimum agent endpointing delay to allow pauses within commands.
+Interruptions remain disabled in this backend; enabling board AEC does not
+change the agent's turn-taking policy. LiveKit Inference is the backend used
+for S31 hardware validation; OpenAI Realtime has not been live-tested here.
+Set `LIVEKIT_AGENT_VOICE_ID` in `agent/.env` to choose a Cartesia voice;
+the default is `9626c31c-bec5-4cca-baa8-f8ba9e84c8bc`. This setting only affects
+the `livekit-inference` backend. RGB commands set the board's single pixel
+once and leave it on until an explicit off request.
+The existing `openai-realtime` backend remains the default and requires its
+own provider credential. Stop the local agent with Ctrl+C and disconnect the
+board after testing so microphone publication does not continue unattended.
 
 ## Next Steps
 

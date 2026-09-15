@@ -26,3 +26,10 @@ idf_component_get_property(LIVEKIT_SDK_VERSION ${COMPONENT_NAME} COMPONENT_VERSI
 target_compile_definitions(${COMPONENT_LIB} PUBLIC "LIVEKIT_SDK_VERSION=\"${LIVEKIT_SDK_VERSION}\"")
 
 target_compile_options(${COMPONENT_LIB} PRIVATE "-Wconversion")
+
+# ESP-IDF 6.1's ESP32-S31 RISC-V headers currently emit sign-conversion
+# diagnostics when included from a component compiled with -Wconversion.
+# Keep the diagnostics visible without promoting IDF header warnings to errors.
+if(IDF_TARGET STREQUAL "esp32s31")
+    target_compile_options(${COMPONENT_LIB} PRIVATE "-Wno-error=sign-conversion")
+endif()

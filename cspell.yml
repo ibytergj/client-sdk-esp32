@@ -11,9 +11,18 @@ dictionaries:
   - cpp
   - python
 words:
+  - apll
+  - playout
+  - talkspurt
+  - talkspurts
+  - undebug
+  - cartesia
   - asrc
   - cjson
   - werror
+  - ctest
+  - deepgram
+  - endpointing
   - addopts
   - adduser
   - adec
@@ -24,6 +33,7 @@ words:
   - bclk
   - bldo
   - colorstyle
+  - coreboard
   - ctlr
   - defconfig
   - discon
@@ -32,12 +42,15 @@ words:
   - endchoice
   - endmenu
   - espressif
+  - esptool
   - esptoolpy
   - flashfreq
   - flashmode
   - flashsize
   - flashsize
   - gcode
+  - hflip
+  - hsync
   - jtag
   - kconfig
   - khash
@@ -52,6 +65,7 @@ words:
   - logw
   - lwip
   - mbedtls
+  - mcause
   - mclk
   - mdfile
   - menuconfig
@@ -66,6 +80,7 @@ words:
   - pcma
   - pcmu
   - pingpong
+  - postroll
   - projbuild
   - protoc
   - psram
@@ -74,7 +89,11 @@ words:
   - pythonunbuffered
   - recvmbox
   - retx
+  - ringbuf
+  - ringbuffer
+  - riscv
   - sccb
+  - sclk
   - scrs
   - sdkconfig
   - sntp
@@ -83,7 +102,15 @@ words:
   - srtc
   - srtp
   - tempotian
+  - thrd
+  - tsens
+  - vidioc
+  - vsync
   - watchpoint
   - waveshare
   - wconversion
   - xclk
+  - iram
+  - unicore
+  - noniram
+  - cpuid
