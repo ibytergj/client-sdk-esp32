@@ -81,6 +81,13 @@ boundary so a continuously busy software encoder cannot starve the idle task.
 The 10 fps setting is a target; received frame rate also depends on scene
 complexity and CPU load. Keep the task watchdog enabled during validation.
 
+The v0.3.11 refresh, with AEC enabled, passed the same sustained receiver
+test: 6,294 frames at 240 x 240 over 628.216 seconds, averaging 10.017 fps,
+with 62,999 audio frames and a maximum video gap of 362 milliseconds.
+No firmware or watchdog errors were logged. This run checked continuous
+reception; visual/listening acceptance and overlapping-speech returns were
+not repeated. See the [refresh validation record](../../../../docs/s31-refresh-validation.md).
+
 ESP32-S31-Function-CoreBoard-1 has no onboard camera, so this example requires
 an external camera plus a board-specific adapter on that board. Such an adapter
 must provide a camera supported by `esp_cam_sensor`/`esp_video`, its SCCB/I2C

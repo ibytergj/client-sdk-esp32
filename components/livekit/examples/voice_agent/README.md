@@ -131,26 +131,37 @@ From the `agent` directory, run this PowerShell command for a hardware
 test (replace the room name with the firmware's configured room):
 
 ```powershell
-uv run python agent.py connect --room esp32-s31-interop --no-watch
+uv run python agent.py connect --room esp32-s31-interop
 ```
+
+The locked CLI generates an agent identity when none is supplied. If you
+set `--participant-identity`, choose an identity different from the board's;
+this option names the agent, not the board it should control. Sharing an
+identity disconnects the previous participant. The locked `connect` command
+does not accept `--no-watch`.
 
 The agent follows the v0.3.11 upstream example: AssemblyAI Universal-3.5 Pro
 STT, Gemma 4, and Fish Audio S2.1 Pro TTS through LiveKit Inference, with
 adaptive interruptions and the Inference turn detector. Set
 `LIVEKIT_AGENT_VOICE_ID` in `agent/.env.local` to choose a Fish Audio voice;
 the default is `fa4c9eb3dccc4806b382b40d61c6b10a`. The earlier
-`LIVEKIT_AGENT_BACKEND` selector is no longer used.
+`LIVEKIT_AGENT_BACKEND` selector is no longer used. Upstream replaced its
+OpenAI Realtime example with this Inference pipeline in v0.3.11; the refresh
+follows that upstream change.
 
 Board discovery runs before the greeting, and the session and hardware RPCs
 use the same participant. RGB commands set the board's single pixel once
 and leave it on until an explicit off request. Console mode uses simulated
 hardware tools and does not wait for a board.
 
-The earlier S31 listening results used a different Inference pipeline with
-interruptions disabled. They do not validate this updated agent's turn-taking
-or resistance to self-triggered replies; repeat those checks when testing the
-v0.3.11 integration. Stop the local agent with Ctrl+C and disconnect the board
-after testing so microphone publication does not continue unattended.
+The v0.3.11 refresh passed attended conversation, board identity, temperature
+and RGB control checks on both S31 boards. Korvo also resumed conversation
+after an agent restart without a board reset. Detailed overlap, adaptive
+interruptions and resistance to self-triggered replies were not separately
+assessed in this refresh; the earlier sustained listening results used a
+different Inference pipeline. See the [refresh validation record](../../../../docs/s31-refresh-validation.md)
+for the tested scope. Stop the local agent with Ctrl+C and disconnect the
+board after testing so microphone publication does not continue unattended.
 
 ## Next Steps
 
