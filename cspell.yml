@@ -11,6 +11,9 @@ dictionaries:
   - cpp
   - python
 words:
+  - assemblyai
+  - fishaudio
+  - huggingface
   - riscv
   - esac
   - sdmmc
