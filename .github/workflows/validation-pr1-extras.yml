@@ -1,0 +1,26 @@
+# Validation-branch harness only; do not include this file in the PR1 correction.
+# The fork's read-only token cannot invoke docs.yml's deployment job, even
+# when deploy is false. Run the same documentation build without deployment.
+name: PR1 Validation Extras
+on:
+  workflow_dispatch: {}
+permissions:
+  contents: read
+jobs:
+  docs:
+    name: Build Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Install Doxygen
+        uses: ssciwr/doxygen-install@fa3e94d34131d3990b6b8ba939ab982964aa3758 # v2.0.3
+        with: { version: "1.14.0" }
+      - name: Build
+        run: cd docs && doxygen
+  registry:
+    name: Registry Dry Run
+    uses: ./.github/workflows/esp_registry.yml
+    with: { dry_run: true }
+    secrets:
+      ESP_REGISTRY_TOKEN: ${{ secrets.ESP_REGISTRY_TOKEN }}
