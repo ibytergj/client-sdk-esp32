@@ -1,4 +1,5 @@
 name: Build Documentation
+# Validation branch only: build the documentation without Pages deployment.
 on:
   workflow_call:
     inputs:
@@ -18,24 +19,3 @@ jobs:
         with: { version: "1.14.0" }
       - name: Build
         run: cd docs && doxygen
-      - name: Configure Pages
-        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
-      - name: Upload Generated Docs
-        if: ${{ inputs.deploy }}
-        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
-        with: { path: docs/output/html }
-  deploy-docs:
-    name: Deploy Documentation
-    needs: build-docs
-    if: ${{ inputs.deploy }}
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
