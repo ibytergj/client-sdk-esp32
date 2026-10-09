@@ -41,9 +41,9 @@ candidate above. All three proposals merge cleanly into upstream `d492fa8`;
 upstream has two subsequent Python lockfile updates. The S31 registry
 workflow now pins an action with component manager 3.0.1, since the former
 2.4.0 manager does not recognize S31 in its standalone upload environment.
-The GitHub registry action has not been run on this proposal.
+At that time, the GitHub registry action had not been run on this proposal.
 
-These are combined-candidate smoke tests. They do not rerun the standalone
+Those were combined-candidate smoke tests. They did not rerun the standalone
 S3/P4 ESP-IDF 5.4.4/5.5.3 CI matrix or the registry dry-run action. Runtime
 tests used pregenerated tokens; Sandbox HTTPS and subscriber-primary paths
 remain unverified on this refresh. CoreBoard agent-restart recovery was not
@@ -55,3 +55,20 @@ not repeated. No heap/PSRAM trend was instrumented. Detailed overlap,
 adaptive interruptions and self-triggering behavior of the updated agent
 were not separately assessed. Earlier sustained AEC/listening results keep
 their original configuration and scope; these results do not replace them.
+
+## Compatibility correction validation on 2026-10-09
+
+The candidate carries the shared dependency and ESP-IDF compatibility
+corrections described in `dependency-validation.md` into the submitted S31
+branch at `b685133`. This branch already declares its JSON and temperature
+sensor dependencies explicitly, so their declarations need no further change.
+The S31 board drivers, audio renderer, AEC integration and agent behavior
+are unchanged by this correction.
+
+All 18 S3/P4 application/version/target combinations passed locally with
+IDF 5.4.4, 5.5.3 and 6.1. The corrected S31 Korvo voice example also rebuilt
+with the documented IDF 6.1 toolchain patch. A separate fork branch is being
+used for the six-job GitHub matrix, documentation, spelling, license,
+links and S31 component registry dry-run. Those new GitHub results and the
+repeated host checks will be recorded after completion. No new hardware
+results are claimed.
