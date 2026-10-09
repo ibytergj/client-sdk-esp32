@@ -11,6 +11,7 @@ dictionaries:
   - cpp
   - python
 words:
+  - huggingface
   - esac
   - sdmmc
   - sdio
